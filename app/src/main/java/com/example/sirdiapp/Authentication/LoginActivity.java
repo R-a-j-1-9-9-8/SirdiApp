@@ -1,12 +1,19 @@
-package com.example.sirdiapp;
+package com.example.sirdiapp.Authentication;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Toast;
+
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
+import com.example.sirdiapp.MainActivity;
+import com.example.sirdiapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
@@ -15,13 +22,13 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginActivity extends AppCompatActivity{
 
-    private FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener mAuthList;
+    FirebaseAuth mAuth;
+    FirebaseAuth.AuthStateListener mAuthList;
 
-    private TextInputLayout emailf,passf;
+    TextInputLayout emailf,passf;
 
     private long backpressedtime;
-    private Toast backtoast;
+    Toast backtoast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +59,7 @@ public class LoginActivity extends AppCompatActivity{
         mAuth.addAuthStateListener(mAuthList);
     }
 
+    //on pressing back in this activity
     @Override
     public void onBackPressed() {
         if(backpressedtime+2000>System.currentTimeMillis()){
@@ -65,7 +73,7 @@ public class LoginActivity extends AppCompatActivity{
         backpressedtime= System.currentTimeMillis();
     }
 
-    public void createaccount_clicked(View view) {
+    public void create_account_clicked(View view) {
         Intent intent = new Intent(this, CreateAccountActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
@@ -76,32 +84,66 @@ public class LoginActivity extends AppCompatActivity{
         String email = emailf.getEditText().getText().toString().trim();
         String pass = passf.getEditText().getText().toString().trim();
 
+        //checking for validation
         if(email.isEmpty()){
-            emailf.setError("Field Can't be Empty");
-            return;
-        }
-        if(pass.isEmpty()){
-            passf.setError("Field Can't be Empty");
+            YoYo.with(Techniques.Shake)
+                    .duration(500)
+                    .repeat(0)
+                    .playOn(emailf);
+            emailf.setError("*Field Can't be Empty");
+            emailf.requestFocus();
             return;
         }
         if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
-            emailf.setError("Enter Valid Email");
+            YoYo.with(Techniques.Shake)
+                    .duration(500)
+                    .repeat(0)
+                    .playOn(emailf);
+            emailf.setError("*Enter Valid Email");
+            emailf.requestFocus();
             return;
         }
+        if(pass.isEmpty()){
+            YoYo.with(Techniques.Shake)
+                    .duration(500)
+                    .repeat(0)
+                    .playOn(passf);
+            passf.setError("*Field Can't be Empty");
+            passf.requestFocus();
+            return;
+        }
+
         if(pass.length()<6){
-            passf.setError("Minimum length of password should be 6");
+            YoYo.with(Techniques.Shake)
+                    .duration(500)
+                    .repeat(0)
+                    .playOn(passf);
+            passf.setError("*Minimum length of password should be 6");
+            passf.requestFocus();
             return;
         }
+
+        final ProgressDialog dialog;
+        dialog =new ProgressDialog(LoginActivity.this,R.style.AppCompatAlertDialogStyle);
+        dialog.setTitle("Please Wait");
+        dialog.setMessage("Authenticating...");
+        dialog.show();
 
         mAuth.signInWithEmailAndPassword(email,pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
+
+                //check for task successful
                 if(task.isSuccessful()){
+                    //if success
+                    dialog.dismiss();
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
                     finish();
                 } else{
+                    //if failed error message
+                    dialog.dismiss();
                     Toast.makeText(LoginActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }

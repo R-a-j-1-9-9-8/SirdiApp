@@ -8,14 +8,14 @@
     android:gravity="center"
     android:orientation="vertical"
     android:padding="10dp"
-    tools:context=".CreateAccountActivity">
+    tools:context=".Authentication.CreateAccountActivity">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:text="@string/it_s_quick_and_easy"
-        android:textColor="@color/green4"
+        android:text="It's Quick and Easy!"
+        android:textColor="@color/green3"
         android:textSize="30sp"
         android:textStyle="bold" />
 
@@ -36,9 +36,9 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:drawableStart="@drawable/mail_green"
+            android:drawableStart="@drawable/mail"
             android:drawablePadding="10dp"
-            android:hint="@string/enter_your_email"
+            android:hint="Enter your Email"
             android:inputType="textEmailAddress"
             android:padding="15dp"
             android:textColor="@color/black"
@@ -65,9 +65,9 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:drawableStart="@drawable/lock_green"
+            android:drawableStart="@drawable/lock"
             android:drawablePadding="10dp"
-            android:hint="@string/create_new_password"
+            android:hint="Create new Password"
             android:inputType="numberPassword"
             android:padding="15dp"
             android:textColor="@color/black"
@@ -94,9 +94,9 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:drawableStart="@drawable/lock_green"
+            android:drawableStart="@drawable/lock"
             android:drawablePadding="10dp"
-            android:hint="@string/confirm_new_password"
+            android:hint="Confirm new Password"
             android:inputType="numberPassword"
             android:padding="15dp"
             android:textColor="@color/black"
@@ -110,25 +110,26 @@
         android:layout_height="50dp"
         android:layout_gravity="center"
         android:layout_margin="10dp"
-        android:background="@drawable/rect_button"
-        android:drawableEnd="@drawable/keyboard_arrow_right_green"
+        android:background="@drawable/curv_rect_back"
+        android:drawableEnd="@drawable/keyboard_arrow_right"
         android:onClick="signup_clicked"
         android:padding="10dp"
-        android:text="@string/register"
+        android:text="Register"
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="20sp" />
 
-    <ImageView
-        android:id="@+id/cancel"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_gravity="center"
-        android:layout_margin="10dp"
-        android:background="@drawable/round_button"
-        android:contentDescription="@string/account_creation"
-        android:onClick="cancel_clicked"
-        android:padding="10dp"
-        android:src="@drawable/arrow_left_white" />
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:contentDescription="account_creation"
+            android:onClick="cancel_clicked"
+            android:src="@drawable/arrow_left_icon"
+            android:backgroundTint="@color/green3"
+            app:fabSize="normal"
+            app:rippleColor="@color/green7"/>
 
 </LinearLayout>

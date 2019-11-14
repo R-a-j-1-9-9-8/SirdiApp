@@ -6,46 +6,52 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/drawer_home"
-            android:icon="@drawable/home_white"
-            android:title="@string/home" />
-        <item
-            android:id="@+id/drawer_Profile"
-            android:icon="@drawable/person_white"
-            android:title="@string/profile" />
+            android:icon="@drawable/home_icon"
+            android:title="Home" />
+
         <item
             android:id="@+id/drawer_notification"
-            android:icon="@drawable/notifications_white"
-            android:title="@string/notification" />
+            android:icon="@drawable/notifications_icon"
+            android:title="Notification" />
+
+        <item
+            android:id="@+id/drawer_Profile"
+            android:icon="@drawable/person_icon"
+            android:title="Profile" />
+
         <item
             android:id="@+id/drawer_setting"
-            android:icon="@drawable/settings_white"
-            android:title="@string/settings" />
+            android:icon="@drawable/settings_icon"
+            android:title="Settings" />
     </group>
 
-    <item android:title="@string/communicate">
+    <item android:title="Communicate">
         <menu>
             <item
                 android:id="@+id/drawer_contact"
-                android:icon="@drawable/call_white"
-                android:title="@string/contact_us" />
+                android:icon="@drawable/call_icon"
+                android:title="Contact Us" />
+
             <item
                 android:id="@+id/drawer_share"
-                android:icon="@drawable/share_white"
-                android:title="@string/share_the_app" />
+                android:icon="@drawable/share_icon"
+                android:title="Share the App" />
         </menu>
     </item>
 
-    <item android:title="@string/about">
+    <item android:title="About">
         <menu>
             <item
                 android:id="@+id/drawer_terms"
-                android:title="@string/terms_and_conditions" />
+                android:title="Terms and Conditions" />
+
             <item
                 android:id="@+id/drawer_feedback"
-                android:title="@string/feedback" />
+                android:title="Feedback" />
+
             <item
                 android:id="@+id/drawer_about"
-                android:title="@string/about_sirdi" />
+                android:title="About Sirdi" />
         </menu>
     </item>
 </menu>
