@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.webkit.MimeTypeMap;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -28,22 +29,25 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+
+import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class NewProfileActivity extends AppCompatActivity {
 
     private static final int PICK_IMAGE_REQUEST=1;
-    Uri mImageUri;
-    CircleImageView mImageview;
-    TextInputLayout username;
-    ProgressDialog dialog;
+    private Uri mImageUri;
+    private CircleImageView mImageview;
+    private TextInputLayout username;
+    private ProgressDialog dialog;
 
-    StorageReference profiledataref;
-    StorageTask task;
-    FirebaseAuth mAuth;
-    FirebaseUser user;
+    private StorageReference profiledataref;
+    private StorageTask task;
+    private FirebaseUser user;
+    private ProgressBar progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,20 +56,41 @@ public class NewProfileActivity extends AppCompatActivity {
 
         mImageview = findViewById(R.id.new_image_view);
         username=findViewById(R.id.user_enter);
+        progress=findViewById(R.id.update_progress);
 
-        mAuth = FirebaseAuth.getInstance();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
         profiledataref = FirebaseStorage.getInstance()
                 .getReference("profilepics/");
         user = mAuth.getCurrentUser();
 
+        loaduserdata();
+    }
+
+    private void loaduserdata() {
         if (user != null) {
             if (user.getDisplayName() != null) {
-                username.getEditText().setText(user.getDisplayName());
+                Objects.requireNonNull(username.getEditText()).setText(user.getDisplayName());
             }
             if (user.getPhotoUrl() != null) {
+                progress.setVisibility(View.VISIBLE);
                 Picasso.get()
                         .load(user.getPhotoUrl().toString())
-                        .into(mImageview);
+                        .error(R.drawable.blankprofile_round)
+                        .into(mImageview, new Callback() {
+                            @Override
+                            public void onSuccess() {
+                                progress.setVisibility(View.INVISIBLE);
+                                YoYo.with(Techniques.FadeIn)
+                                        .duration(1000)
+                                        .repeat(0)
+                                        .playOn(findViewById(R.id.new_image_view));
+                            }
+
+                            @Override
+                            public void onError(Exception e) {
+                                progress.setVisibility(View.INVISIBLE);
+                            }
+                        });
             }
         }
     }
@@ -98,7 +123,7 @@ public class NewProfileActivity extends AppCompatActivity {
         finish();
     }
 
-    public String getFileExtension(Uri uri) {
+    private String getFileExtension(Uri uri) {
         ContentResolver cr = getContentResolver();
         MimeTypeMap mime = MimeTypeMap.getSingleton();
         return mime.getExtensionFromMimeType(cr.getType(uri));
@@ -109,7 +134,7 @@ public class NewProfileActivity extends AppCompatActivity {
             Toast.makeText(this, "Wait Server is Busy", Toast.LENGTH_SHORT).show();
         } else {
 
-            String user_name = username.getEditText().getText().toString().trim();
+            String user_name = Objects.requireNonNull(username.getEditText()).getText().toString().trim();
 
             if (user_name.isEmpty()) {
                 YoYo.with(Techniques.Shake)
